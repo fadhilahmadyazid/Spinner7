@@ -77,8 +77,7 @@
         width: 100%;
         background: #111 url(img/pe.png) repeat-x center top;
         border-bottom: 1px solid #d35400;
-      "
-    >
+      ">
       <div class="row">
         <div
           class="large-12 columns"
@@ -88,11 +87,11 @@
             z-index: 20;
           "
         >
-          <ul class="button-group even-4">
+          <ul class="button-group even-3">
             <li>
-              <a href="index.html" class="alert button" id="reset" onclick="reset()">Reset</a>
+              <a href="index.html" class="alert button" id="back" onclick="back()">Back To main page</a>
             </li>
-            <li>
+            <!-- <li>
               <button class="button" id="list" onclick="namelist();">
                 Name List
               </button>
@@ -101,17 +100,17 @@
               <button class="button" id="save" onclick="save();">
                 Save &amp; Update
               </button>
-            </li>
-            <!-- <li>
+            </li> -->
+            <li>
               <button class="button" id="report" onclick="report();">
                 Report
               </button>
-            </li> -->
+            </li>
           
             <li>
-              <a href="go.html" class="success button" id="go" onclick="go();">
-                next to go page!
-              </a>
+            <button class="success button" id="go" onclick="go();">
+              GO!
+            </button>
           </li>
     
           </ul>
@@ -239,18 +238,19 @@
         $("body").css({ "overflow-y": "visible" });
         let reportname = localStorage.getItem('reportname');
         $('#namesbox').val(reportname)
-        // var count = 1;
-        // for (var i in names) {
-        //   if (names[i] == "" || typeof names[i] == undefined) {
-        //     count = count - 1;
-        //   } else {
-        //     name = names[i];
-        //     //console.log(name);
-        //     $("#values").append(
-        //       "<div id=result" + count + " class=name>" + name + "</div>"
-        //     );
-        //   }
+                  // var count = 1;
+                  // for (var i in names) {
+                  //   if (names[i] == "" || typeof names[i] == undefined) {
+                  //     count = count - 1;
+                  //   } else {
+                  //     name = names[i];
+                  //     //console.log(name);
+                  //     $("#values").append(
+                  //       "<div id=result" + count + " class=name>" + name + "</div>"
+                  //     );
+                  //   }
       }
+    
 
       function namelist() {
         $("#varnote").hide();
@@ -388,6 +388,7 @@
           'OK, done! Let\'s see who is next? Just click "GO!" button for next roll.'
         );
       }
+    
     </script>
     </section>
   </body>
