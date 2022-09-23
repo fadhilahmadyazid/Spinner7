@@ -33,11 +33,22 @@
         padding: 5px;
       }
       #namesbox {
+        float: left;
         min-height: 400px;
+        width: 50%;
         font-size: 32px;
         color: #333;
         resize: none;
-        border: 1px solid #f39c12;
+        border: 1px solid #414141;
+      }
+      #namesbox1{
+        float: left;
+        min-height: 200px;
+        width: 50%;
+        font-size: 32px;
+        color: #333;
+        resize: none;
+        border: 1px solid #414141;
       }
       .extra {
         font-size: 16px;
@@ -67,6 +78,55 @@
         font-family: Tahoma;
         color: #000000;
       }
+      #headline1{
+        text-align: left;
+        margin-top: 30px;
+        float:left;
+        width: 50%;
+      }
+      #headline2{
+        text-align: right;
+        margin-top: 30px;
+        float:left;
+        width: 50%;
+      }
+
+
+      .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-content a:hover {background-color: #f1f1f1}
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -88,7 +148,7 @@
             z-index: 20;
           "
         >
-          <ul class="button-group even-4">
+          <ul class="button-group even-5">
             <li>
               <a href="index.html" class="alert button" id="reset" onclick="reset()">Reset</a>
             </li>
@@ -102,16 +162,21 @@
                 Save &amp; Update
               </button>
             </li>
-            <!-- <li>
+            <li>
               <button class="button" id="report" onclick="report();">
                 Report
               </button>
-            </li> -->
+            </li>
           
             <li>
-              <a href="go.html" class="success button" id="go" onclick="go();">
-                next to go page!
+              <a href="go.html" class="success button" id="next" onclick="next();">
+                Next to go page!
               </a>
+          </li>
+          <li>
+            <button class="button" id="pilihhadiah" onclick="pilihadiah();">
+              Pilih Hadiah
+            </button>
           </li>
     
           </ul>
@@ -124,6 +189,15 @@
         <h3 style="text-align: center; margin-top: 30px" id="headline">
           Siapa Yang beruntung?
         </h3>
+        <h4 style="text-align: left; margin-top: 30px float" id="headline1">
+        </h4>
+        <h4 style="text-align: left; margin-top: 30px" id="headline2">
+        </h4>
+        <h4 style="text-align: center; margin-top: 30px" id="headline3">
+        </h4>
+        <!-- <h3 style="text-align: right; margin-top: 30px" id="headline1">
+          Siapa Yang beruntung?
+        </h3> -->
 
         <div id="varnote">
           <img src="img/122.png" />
@@ -136,9 +210,20 @@
         <div id="popdown">
           <div id="names" class="inbox">
             <textarea name="namesbox" id="namesbox"></textarea>
-          </div>
-        </div>
+            <textarea name="namesbox1" id="namesbox1"></textarea>
 
+        </div>
+        
+        <div class="dropdown" id="dropdown">
+          <button class="dropbtn" id="dropbtn">Dropdown</button>
+          <div class="dropdown-content" id="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+          </div>
+      </div>
+       
+        </div>
         <div id="list-report">
           <div id="names" class="inbox">
             <th>
@@ -175,6 +260,11 @@
         let listname = localStorage.getItem('listname');
         $("#namesbox").val(listname);
         console.log(listname)
+      })
+      $(document).ready(function() {
+        let listname1 = localStorage.getItem('listname1');
+        $("#namesbox1").val(listname1);
+        console.log(listname1)
       })
       var text;
       var names = new Array();
@@ -220,18 +310,25 @@
         $("#popdown").show();
         $("#values").hide();
         $("div").remove("#result1");
-        savenames = $("#namesbox").val();
+        savenames = $("#namesbox").val(); 
         localStorage.setItem('listname', savenames);
         savenames = savenames.replace(/\n\r?/g, "101");
+        savenames = $("#namesbox1").val(); 
+        localStorage.setItem('listname1', savenames);
+        savenames = savenames.replace(/\n\r?/g, "101");
         $("#headline").fadeOut();
-        $("#headline").text("The name list is saved and updated").fadeIn();
+        $("#headline").text("The name list and hadiah list is saved and updated").fadeIn();
+        $("#headline").text("The name list and hadiah list is saved and updated").fadeIn();
+        $("#headline3").hide();
         $("#names").show();
         $("#namesbox").attr("disabled", "disabled");
+        $("#namesbox1").attr("disabled", "disabled");
       }
 
       function report() {
         $("#varnote").hide();
         $("#namesbox").removeAttr("disabled", "disabled");
+        $("#namesbox1").removeAttr("disabled", "disabled");
         $("#headline").text("My Report");
         $("#popdown").show();
         $("#values").hide();
@@ -239,30 +336,58 @@
         $("body").css({ "overflow-y": "visible" });
         let reportname = localStorage.getItem('reportname');
         $('#namesbox').val(reportname)
-        // var count = 1;
-        // for (var i in names) {
-        //   if (names[i] == "" || typeof names[i] == undefined) {
-        //     count = count - 1;
-        //   } else {
-        //     name = names[i];
-        //     //console.log(name);
-        //     $("#values").append(
-        //       "<div id=result" + count + " class=name>" + name + "</div>"
-        //     );
-        //   }
+        $('#namesbox1').val(reportname)
+                  // var count = 1;
+                  // for (var i in names) {
+                  //   if (names[i] == "" || typeof names[i] == undefined) {
+                  //     count = count - 1;
+                  //   } else {
+                  //     name = names[i];
+                  //     //console.log(name);
+                  //     $("#values").append(
+                  //       "<div id=result" + count + " class=name>" + name + "</div>"
+                  //     );
+                  //   }
       }
 
       function namelist() {
+        
         $("#varnote").hide();
         $("#namesbox").removeAttr("disabled", "disabled");
-        $("#headline").text("Configure name list");
+        $("#namesbox1").removeAttr("disabled", "disabled");
+        $("#headline").hide();
+        $("#headline1").text("Name list");
+        $("#headline2").text("Hadiah List");
+        $("#headline3").hide();
         $("#popdown").show();
         $("#values").hide();
         $("#names").show();
         $("body").css({ "overflow-y": "visible" });
         let listname = localStorage.getItem('listname');
         $("#namesbox").val(listname);
+        let listname1 = localStorage.getItem('listname1');
+        $("#namesbox1").val(listname1);
       }
+
+      function pilihadiah() {
+        
+        $("#varnote").hide();
+        $("#namesbox").hide();
+        $("#namesbox1").hide();
+        $("#headline").text("Pilih Hadiah List");
+        $("#headline1").hide();
+        $("#headline2").hide();
+        $("#popdown").show();
+        $("#values").hide();
+        $("#names").show();
+        $("body").css({ "overflow-y": "visible" });
+        // let listname = localStorage.getItem('listname');
+        // $("#namesbox").val(listname);
+        // let listname1 = localStorage.getItem('listname1');
+        // $("#namesbox1").val(listname1);
+      }
+
+      
 
       // does the actual animation
       function go() {
