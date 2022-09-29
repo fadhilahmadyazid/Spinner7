@@ -63,7 +63,7 @@
         color: #fbe34b;
         padding: 20px;
         z-index: 10;
-        margin-top: -150px;
+        margin-top: -50px;
       }
       body {
         opacity: 4;
@@ -152,37 +152,38 @@
             z-index: 20;
           "
         >
-          <ul class="button-group even-5">
+          <ul class="button-group even-4">
             <li>
-              <a href="index.html" class="success button" id="home" onclick="home()">Home</a>
+              <a href="index.html" class="alert button" id="back" onclick="back()">Back </a>
             </li>
-            <li>
+            <!-- <li>
               <a href="index.html" class="alert button" id="reset" onclick="reset()">Reset</a>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <button class="button" id="list" onclick="namelist();">
                 Name List
               </button>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <button class="button" id="save" onclick="save();">
                 Save &amp; Update
               </button>
-            </li>
-            <!-- <li>
-              <button class="button" id="report" onclick="report();">
-                Report
-              </button>
             </li> -->
-            <!-- <li>
+            
+            <li>
               <button class="button" id="pilihadiah" onclick="pilihadiah();">
                 Pilih Hadiah
               </button>
-            </li> -->
+            </li>
+            <li>
+              <button class="button" id="report" onclick="report();">
+                Report
+              </button>
+            </li>
           
             <li>
-              <a href="go1.html" class="success button" id="next" onclick="next();">
-                Next to go page!
+              <button class="success button" id="go" onclick="go();">
+                GO!
               </a>
             </li>
           </ul>
@@ -473,6 +474,11 @@
       // does the actual animation
       function go() {
         $("#varnote").hide();
+        $("#headline1").hide();
+        $("#headline2").hide();
+        $("#values").show();
+        $(".name").show();
+        $("#popdown").hide();
         $("body").css({ "overflow-y": "hidden" });
         $("#go").attr("disabled", "disabled");
         $("#list").attr("disabled", "disabled");
@@ -481,10 +487,13 @@
         $("#namesbox").slideDown();
         let listname = localStorage.getItem('listname');
         $("#namesbox").val(listname);
+        $("div").remove(".name");
+        $("div").remove(".extra");
+        $("#playback").html("");
 
         var count = 1;
         count = 1;
-        $("div").remove("#result1");  
+        $("div").remove("#result1");
         names = $("#namesbox").val();
         if (document.all) {
           // IE
@@ -493,20 +502,20 @@
           //Mozilla
           names = names.split("\n");
         }
-        $("#values").show();
-        $(".name").show();
-        $("#popdown").hide();
-        $("div").remove(".name");
-        $("div").remove(".extra");
-        $("#playback").html("");
+       
+        // ini run pengacakan value
         newtop = names.length * 200 * -1;
         //$('#values').css({top: -300});
         $("#values").css({ top: +newtop });
         names.sort(randOrd);
-        var fruits = new Array("apple", "pear", "orange", "banana");
+        //sampai sini
+
+        // var fruits = new Array("apple", "pear", "orange", "banana");
         //console.log(fruits);
         //console.log(names);
         //alert(newtop);
+
+        //MENAMPILKAN PEMENANG  DAN STAND OUT
         for (var i in names) {
           if (names[i] == "" || typeof names[i] == undefined) {
             count = count - 1;
@@ -519,6 +528,9 @@
           }
           count = count + 1;
         }
+        //Sampai sini
+
+
         for (var i in names) {
           if (names[i] == "" || typeof names[i] == undefined) {
           } else {
@@ -527,6 +539,7 @@
           }
           count = count + 1;
         }
+
         for (var i in names) {
           if (names[i] == "" || typeof names[i] == undefined) {
           } else {
@@ -537,18 +550,22 @@
         }
         text = $("#result1").text();
         console.log(text);
+        
+        //Animasi random
         $("#values").animate({ top: "+176" }, 7000);
 
         // make it stand out
         setTimeout("standout(text)", 7000);
-        //setTimeout("$('#playback').hide('slow')",11005);
       }
+
+      
+
 
       function standout(text) {
         $("#result1").removeClass("name");
         console.log(text)
         $(".name").animate({ opacity: 0.25 });
-        $("#result1").animate({ height: "+=60px" });
+        // $("#result1").animate({ height: "+=60px" });
         $("#result1").append(
           `<div class="extra"><a class="small alert button" href="#" onClick="removevictim('${text}');">Remove name from list</a></div>`
         );

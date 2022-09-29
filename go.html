@@ -40,6 +40,15 @@
         resize: none;
         border: 1px solid #f39c12;
       }
+      #namesbox1{
+        float: left;
+        min-height: 200px;
+        width: 50%;
+        font-size: 32px;
+        color: #333;
+        resize: none;
+        border: 1px solid #414141;
+      }
       .extra {
         font-size: 16px;
         margin-top: 20px;
@@ -68,6 +77,55 @@
         font-family: Tahoma;
         color: #000000;
       }
+      #headline1{
+        text-align: left;
+        margin-top: 30px;
+        float:left;
+        width: 50%;
+      }
+      #headline2{
+        text-align: right;
+        margin-top: 30px;
+        float:left;
+        width: 50%;
+      }
+
+
+      .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-content a:hover {background-color: #f1f1f1}
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -88,16 +146,19 @@
             z-index: 20;
           "
         >
-          <ul class="button-group even-2">
+          <ul class="button-group even-4">
             <li>
               <a href="index.html" class="alert button" id="back" onclick="back()">Back To main page</a>
             </li>
-            <!-- <li>
+            <li>
+              <button class="button" id="pilihadiah" onclick="pilihadiah();">
+                Pilih Hadiah
+              </button>
+            </li>
+            <li>
               <button class="button" id="report" onclick="report();">
                 Report
               </button>
-            </li> -->
-          
             <li>
             <button class="success button" id="go" onclick="go();">
               GO!
@@ -124,6 +185,12 @@
         <h3 style="text-align: center; margin-top: 30px" id="headline">
           Siapa Yang beruntung?
         </h3>
+        <h4 style="text-align: left; margin-top: 30px float" id="headline1">
+        </h4>
+        <h4 style="text-align: left; margin-top: 30px" id="headline2">
+        </h4>
+        <h4 style="text-align: center; margin-top: 30px" id="headline3">
+        </h4>
 
         <div id="varnote">
           <img src="img/122.png" />
@@ -136,6 +203,13 @@
         <div id="popdown">
           <div id="names" class="inbox">
             <textarea name="namesbox" id="namesbox"></textarea>
+            <textarea name="namesbox1" id="namesbox1"></textarea>
+          </div>
+          <div id= "i" class="dropdown">
+            <button class="dropbtn">Pilih Hadiah</button>
+            <div class="dropdown-content" id="content-wrapper">
+              <a href="#" id="no-content">No data</a>
+            </div>
           </div>
         </div>
 
@@ -167,6 +241,7 @@
     <script src="js/foundation.min.js"></script>
     <script>
       $(document).foundation();
+      $('#i').hide();
     </script>
 
     <script>
@@ -176,12 +251,51 @@
         $("#namesbox").val(listname);
         console.log(listname)
       })
+      $(document).ready(function() {
+        let listname1 = localStorage.getItem('listname1');
+        $("#namesbox1").val(listname1);
+        console.log(listname1)
+      })
+
       var text;
       var names = new Array();
+      var hadiahnames = new Array();
+
+      
+
+     
+      function namelist() {
+        
+        $("#varnote").hide();
+        $("#headline1").show();
+        $("#headline2").show();
+        $("#popdown").show();
+        $("#names").show();
+        $("#namesbox").show();
+        $("#namesbox1").show();
+        $("#namesbox").removeAttr("disabled", "disabled");
+        $("#namesbox1").removeAttr("disabled", "disabled");
+        $("#headline").hide();
+        $("#headline1").text("Name list");
+        $("#headline2").text("Hadiah List");
+        $("#headline3").hide();
+        $("#popdown").show();
+        $("#values").hide();
+        $("#names").show();
+        $("#i").hide();
+        $("body").css({ "overflow-y": "visible" });
+        let listname = localStorage.getItem('listname');
+        $("#namesbox").val(listname);
+        let listname1 = localStorage.getItem('listname1');
+        $("#namesbox1").val(listname1);
+        
+      }
 
       function reset() {
         window.localStorage.removeItem('listname');
+        window.localStorage.removeItem('listname1');
         window.localStorage.removeItem('reportname');
+        window.localStorage.removeItem('reportname1');
         // re-enable go button
         setTimeout("$('#go').removeAttr('disabled')", 11005);
         var namesbreak = "";
@@ -200,8 +314,28 @@
           }
         }
         $("#namesbox").val(namesbreak);
+        $("#dropdown").hide();
       }
 
+      function save() {
+        $("#varnote").hide();
+        $("#popdown").show();
+        $("#values").hide();
+        $("div").remove("#result1");
+        savenames = $("#namesbox").val(); 
+        localStorage.setItem('listname', savenames);
+        savenames = savenames.replace(/\n\r?/g, "101");
+        savenames = $("#namesbox1").val(); 
+        localStorage.setItem('listname1', savenames);
+        savenames = savenames.replace(/\n\r?/g, "101");
+        $("#headline").fadeOut();
+        $("#headline").text("The name list and hadiah list is saved and updated").fadeIn();
+        // $("#headline").text("The name list and hadiah list is saved and updated").fadeIn();
+        $("#headline3").hide();
+        $("#names").show();
+        $("#namesbox").attr("disabled", "disabled");
+        $("#namesbox1").attr("disabled", "disabled");
+      }
       function gup(para) {
         para = para.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var regexS = "[\\?&]" + para + "=([^&#]*)";
@@ -215,30 +349,27 @@
         return Math.round(Math.random()) - 0.5;
       }
 
-      function save() {
-        $("#varnote").hide();
-        $("#popdown").show();
-        $("#values").hide();
-        $("div").remove("#result1");
-        savenames = $("#namesbox").val();
-        localStorage.setItem('listname', savenames);
-        savenames = savenames.replace(/\n\r?/g, "101");
-        $("#headline").fadeOut();
-        $("#headline").text("The name list is saved and updated").fadeIn();
-        $("#names").show();
-        $("#namesbox").attr("disabled", "disabled");
-      }
-
       function report() {
         $("#varnote").hide();
-        $("#namesbox").removeAttr("disabled", "disabled");
-        $("#headline").text("My Report");
+        $("#i").hide();
+        $("#headline1").show();
+        $("#headline2").show();
         $("#popdown").show();
+        $("#names").show();
+        $("#headline1").text("Name list");
+        $("#headline2").text("Hadiah List");
+        $("#namesbox").show();
+        $("#namesbox1").show();
+        $("#namesbox").removeAttr("disabled", "disabled");
+        $("#namesbox1").removeAttr("disabled", "disabled");
+        $("#headline").text("My Report");
         $("#values").hide();
         $("#list-nama").show();
         $("body").css({ "overflow-y": "visible" });
         let reportname = localStorage.getItem('reportname');
-        $('#namesbox').val(reportname)
+        let reportname1 = localStorage.getItem('reportname1');
+        $('#namesbox').val(reportname);
+        $('#namesbox1').val(reportname1);
                   // var count = 1;
                   // for (var i in names) {
                   //   if (names[i] == "" || typeof names[i] == undefined) {
@@ -253,21 +384,83 @@
                   //}
       }
     
-
-      function namelist() {
+      function pilihadiah() {
+        
         $("#varnote").hide();
-        $("#namesbox").removeAttr("disabled", "disabled");
-        $("#headline").text("Configure name list");
+        $("#namesbox").hide();
+        $("#namesbox1").hide();
+        $("#i").show();
+        $("#headline").show();
+        $("#headline").text("Pilih Hadiah ");
+        $("#headline1").hide();
+        $("#headline2").hide();
         $("#popdown").show();
         $("#values").hide();
         $("#names").show();
         $("body").css({ "overflow-y": "visible" });
-        let listname = localStorage.getItem('listname');
-        $("#namesbox").val(listname);
+        // let listname = localStorage.getItem('listname');
+        // $("#namesbox").val(listname);
+        console.log(names);
+        console.log(hadiahnames);
+        var hadiahList = $('.listHadiah').text();
+        var hadiahData = hadiahList.split(" ");
+        let listname1 = localStorage.getItem('listname1');
+        console.log(listname1);
+        const hadiah = listname1.split(/\r?\n/);
+        if(hadiah.length > 0){
+            $('#no-content').hide();
+            for (let index = 0; index < hadiah.length; index++) {
+              if(hadiahData.includes(hadiah[index]) ==  false){
+                $('#content-wrapper').append(
+                `<a href="#" class="listHadiah">${hadiah[index]} </a>`
+                );
+              }
+            }
+        } else {
+          $('#no-content').show();
+        }
+        
+        // $("#namesbox1").val(listname1);
       }
+     
+      // hadiah dipilih dan masuk ke report
+      $(document).on('click', '.listHadiah', function(){
+          var dataHadiah = $(this).text();
+          dataHadiah = dataHadiah.trim();
+          console.log(dataHadiah);
+          let reportname1 = localStorage.getItem('reportname1');
+          if(reportname1 == null)
+          {
+            localStorage.setItem('reportname1', dataHadiah);
+          } else {
+            reportname1 += `\n${dataHadiah}`
+            localStorage.setItem('reportname1', reportname1);
+          }
+
+          let listname1 = localStorage.getItem('listname1');
+          const hadiah = listname1.split(/\r?\n/);
+          
+          var hadiahUpdated = "";
+          for (let index = 0; index < hadiah.length; index++) {
+            if(hadiah[index] != dataHadiah){
+              hadiahUpdated = hadiahUpdated + "\n" + hadiah[index];
+            }
+          }
+          console.log(hadiahUpdated);
+
+        localStorage.setItem('listname1', hadiahUpdated);
+        $("#namesbox1").val(reportname1);
+        location.reload();
+      });
 
       // does the actual animation
       function go() {
+        $("#values").show();
+        $(".name").show();
+        $("#popdown").hide();
+        $("div").remove(".name");
+        $("div").remove(".extra");
+        $("#playback").html("");
         $("#varnote").hide();
         $("body").css({ "overflow-y": "hidden" });
         $("#go").attr("disabled", "disabled");
@@ -289,12 +482,7 @@
           //Mozilla
           names = names.split("\n");
         }
-        $("#values").show();
-        $(".name").show();
-        $("#popdown").hide();
-        $("div").remove(".name");
-        $("div").remove(".extra");
-        $("#playback").html("");
+        
         newtop = names.length * 200 * -1;
         //$('#values').css({top: -300});
         $("#values").css({ top: +newtop });
