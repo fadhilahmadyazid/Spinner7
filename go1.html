@@ -265,6 +265,26 @@
 
     <script>
 
+      //deklarasi function
+      $(function() {
+	var FADE_DELAY_MS = 800,
+		EXTRA_DELAY = 150,
+		SHOW_NAME_DELAY = 150,
+		MIN_LIST_LENGTH = 60,
+		MAX_LIST_LENGTH = 300;
+
+	// Super simple model - really just need it for the collection
+	//view value data di home
+	var NameEntryModel = Backbone.Model.extend({
+		defaults: {
+			name: ''
+		},
+
+		remove: function() {
+			this.destroy();
+		}
+	});
+
       $(document).ready(function() {
         let listname = localStorage.getItem('listname');
         $("#namesbox").val(listname);
@@ -363,7 +383,8 @@
       }
 
       function randOrd() {
-        return Math.round(Math.random()) - 0.5;
+        // return Math.round(Math.random()) * 0.5;
+        return Math.round(Math.random()) * 0.5;
       }
 
       
@@ -558,7 +579,116 @@
         setTimeout("standout(text)", 7000);
       }
 
-      
+      //Shuffle
+		  function buildDecentShuffledList(){
+			console.log("Shuffle and build list of names");
+			var list = this.getShuffledNames();
+			// Cap at MAX_LIST_LENGTH so the shuffle doesn't take too long
+			if (list.length > MAX_LIST_LENGTH) {
+				list = _.sample(list, MAX_LIST_LENGTH);
+			}
+			// Keep appending shuffled list until we reach a minimum length
+			// min length is only there so the shuffle looks impressive
+			while (list.length < MIN_LIST_LENGTH) {
+				list = list.concat(this.getShuffledNames());
+			}
+			console.log("Total list length:" + list.length);
+			return list;
+		}
+
+    
+      //Picker Function
+		 function go1() {		
+        $("#varnote").hide();
+        $("#headline1").hide();
+        $("#headline2").hide();
+        $("#values").show();
+        $(".name").show();
+        $("#popdown").hide();
+        $("body").css({ "overflow-y": "hidden" });
+        $("#go").attr("disabled", "disabled");
+        $("#list").attr("disabled", "disabled");
+        $("#save").attr("disabled", "disabled");
+        $("#headline").slideUp();
+        $("#namesbox").slideDown();
+        let listname = localStorage.getItem('listname');
+        $("#namesbox").val(listname);
+        $("div").remove(".name");
+        $("div").remove(".extra");
+        $("#playback").html("");
+
+        var count = 1;
+        count = 1;
+        $("div").remove("#result1");
+        names = $("#namesbox").val();
+        if (document.all) {
+          // IE
+          names = names.split("\n");
+        } else {
+          //Mozilla
+          names = names.split("\n");
+        }
+        
+        for (var i in names) {
+          if (names[i] == "" || typeof names[i] == undefined) {
+            count = count - 1;
+          } else {
+            name = names[i];
+            //console.log(name);
+            $("#values").append(
+              "<div id=result" + count + " class=name>" + name + "</div>"
+            );
+          }
+          count = count + 1;
+        }
+        //Sampai sini
+
+
+        for (var i in names) {
+          if (names[i] == "" || typeof names[i] == undefined) {
+          } else {
+            name = names[i];
+            $("#values").append("<div class=name>" + name + "</div>");
+          }
+          count = count + 1;
+        }
+
+        for (var i in names) {
+          if (names[i] == "" || typeof names[i] == undefined) {
+          } else {
+            name = names[i];
+            $("#values").append("<div class=name>" + name + "</div>");
+          }
+          count = count + 1;
+        }
+        text = $("#result1").text();
+        console.log(text);
+        
+        //Animasi random
+        $("#values").animate({ top: "+176" }, 7000);
+
+        // make it stand out
+        setTimeout("standout(text)", 7000);
+
+			var that = this,
+				shuffledNames = this.buildDecentShuffledList();
+			console.log("Picking winner...");
+			// Clean-up existing space
+			if ($("#entry-container").length > 0) {
+				$("#entry-container").slideUp(FADE_DELAY_MS, function(){
+					$(this).remove();
+					$("#winner-container").slideDown(FADE_DELAY_MS, function(){
+						$(this).removeClass("hidden");
+						that.easingTimeout(that.showNames, shuffledNames, SHOW_NAME_DELAY);
+					});
+				});
+			} else {
+				$("#pick-another").fadeOut(FADE_DELAY_MS, function(){
+					$(this).remove();
+					that.easingTimeout(that.showNames, shuffledNames, SHOW_NAME_DELAY);
+				});
+			}
+		}
 
 
       function standout(text) {
@@ -612,6 +742,8 @@
           'OK, done! Let\'s see who is next? Just click "GO!" button for next roll.'
         );
       }
+
+    });
     </script>
     </section>
   </body>
